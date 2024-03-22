@@ -22,14 +22,15 @@ public class Supervisor implements Runnable {
                     System.out.println("RUNNING");
                     break;
                 case STOPPING:
+                    this.stopProg();
                     System.out.println("STOPPING");
                     prog.setState(ProgState.RUNNING);
-                    prog.isStopped = true;
                     System.out.println("RUNNING");
+                    this.runProg();
                     break;
                 case FATAL_ERROR:
-                    System.out.println("FATAL_ERROR");
-                    prog.isWorking = false;
+                    System.out.println("FATAL ERROR");
+                    this.terminateProg();
                     return;
             }
             try {
@@ -38,5 +39,14 @@ public class Supervisor implements Runnable {
                 System.out.println("Interrupted");
             }
         }
+    }
+    public void terminateProg() {
+        prog.isWorking = false;
+    }
+    public void stopProg() {
+        prog.isStopped = true;
+    }
+    public void runProg() {
+        prog.isStopped = false;
     }
 }
